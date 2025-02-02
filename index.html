@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edev Agency | Digital Innovation</title>
+
+    <!-- Optimized Font Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #60a5fa;
+            --accent: #f43f5e;
+            --dark: #0f172a;
+            --light: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Quick Loading Screen */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader-logo {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: loader 0.8s linear infinite;
+        }
+
+        @keyframes loader {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modern Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s ease forwards;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--secondary);
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease 0.4s forwards;
+        }
+
+        /* Modern Button Styles */
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--light);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--secondary);
+            color: var(--light);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Background Effects */
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at 50% 50%,
+                rgba(59, 130, 246, 0.1),
+                transparent 70%
+            );
+        }
+
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(
+                rgba(255, 255, 255, 0.05) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.05) 1px,
+                transparent 1px
+            );
+            background-size: 50px 50px;
+            opacity: 0.5;
+        }
+
+        /* Quick Animations */
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Quick Loading Screen -->
+    <div class="loader">
+        <div class="loader-logo"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="grid-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="hero-title">Transform Your Digital Presence</h1>
+            <p class="hero-subtitle">
+                Innovative digital solutions for modern businesses. We help you grow, 
+                scale, and succeed in the digital landscape.
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn btn-primary">Get Started</a>
+                <a href="#services" class="btn btn-outline">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Quick Loading Screen
+        window.addEventListener('load', () => {
+            document.querySelector('.loader').style.display = 'none';
+        });
+
+        // Optional: Add hover effect for buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', (e) => {
+                const x = e.clientX - e.target.offsetLeft;
+                const y = e.clientY - e.target.offsetTop;
+                
+                const ripple = document.createElement('span');
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                
+                e.target.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+    <!-- Add this right after your existing hero section -->
+
+<!-- Animated Elements Container -->
+<div class="animated-elements">
+    <div class="floating-orb orb1"></div>
+    <div class="floating-orb orb2"></div>
+    <div class="glow-effect"></div>
+</div>
+
+<style>
+/* Add these styles to your existing CSS */
+
+/* Enhanced Animation Effects */
+.animated-elements {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+}
+
+.orb1 {
+    width: 300px;
+    height: 300px;
+    background: rgba(59, 130, 246, 0.15);
+    top: 10%;
+    left: 5%;
+    animation: floatAnimation 15s infinite alternate;
+}
+
+.orb2 {
+    width: 250px;
+    height: 250px;
+    background: rgba(244, 63, 94, 0.15);
+    bottom: 10%;
+    right: 5%;
+    animation: floatAnimation 20s infinite alternate-reverse;
+}
+
+.glow-effect {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background: radial-gradient(circle at center,
+        rgba(59, 130, 246, 0.1) 0%,
+        transparent 50%);
+    animation: rotateGlow 20s linear infinite;
+}
+
+/* Update Hero Title for Split Text Animation */
+.hero-title {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-title .word {
+    display: inline-block;
+    animation: revealText 0.8s cubic-bezier(0.5, 0, 0.1, 1) forwards;
+    opacity: 0;
+    transform: translateY(100%);
+}
+
+.hero-title .word:nth-child(2) { animation-delay: 0.2s; }
+.hero-title .word:nth-child(3) { animation-delay: 0.4s; }
+
+/* Enhanced Button Animations */
+.btn {
+    isolation: isolate;
+    transition: all 0.3s ease;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+}
+
+.btn:hover::before {
+    transform: translateX(100%);
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    background-size: 200% 100%;
+    animation: gradientShift 3s linear infinite;
+}
+
+/* Animations */
+@keyframes floatAnimation {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(30px, 20px) rotate(180deg);
+    }
+    100% {
+        transform: translate(-30px, -20px) rotate(360deg);
+    }
+}
+
+@keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes revealText {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Mouse Move Effect */
+.hero-content {
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease;
+}
+
+</style>
+
+<script>
+// Split text animation
+document.addEventListener('DOMContentLoaded', () => {
+    // Split hero title into words
+    const heroTitle = document.querySelector('.hero-title');
+    const text = heroTitle.textContent;
+    heroTitle.textContent = '';
+    
+    text.split(' ').forEach(word => {
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.textContent = word + ' ';
+        heroTitle.appendChild(span);
+    });
+
+    // Mouse move parallax effect
+    const hero = document.querySelector('.hero');
+    const content = document.querySelector('.hero-content');
+    
+    hero.addEventListener('mousemove', (e) => {
+        const { clientX, clientY } = e;
+        const { innerWidth, innerHeight } = window;
+        
+        const xPos = (clientX / innerWidth - 0.5) * 20;
+        const yPos = (clientY / innerHeight - 0.5) * 20;
+        
+        content.style.transform = `
+            perspective(1000px)
+            rotateY(${xPos}deg)
+            rotateX(${-yPos}deg)
+            translateZ(50px)
+        `;
+    });
+
+    hero.addEventListener('mouseleave', () => {
+        content.style.transform = `
+            perspective(1000px)
+            rotateY(0deg)
+            rotateX(0deg)
+            translateZ(0)
+        `;
+    });
+
+    // Button hover effect
+    document.querySelectorAll('.btn').forEach(button => {
+        button.addEventListener('mouseenter', (e) => {
+            const { left, top } = button.getBoundingClientRect();
+            const x = e.clientX - left;
+            const y = e.clientY - top;
+            
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            button.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 1000);
+        });
+    });
+});
+
+// Add this to your existing loader code
+window.addEventListener('load', () => {
+    const loader = document.querySelector('.loader');
+    loader.style.opacity = '0';
+    setTimeout(() => {
+        loader.style.display = 'none';
+    }, 500);
+
+    // Trigger animations after load
+    document.body.classList.add('loaded');
+});
+</script>
+
+<!-- Add these styles for the ripple effect -->
+<style>
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    animation: rippleEffect 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Loading Animation */
+.loader {
+    transition: opacity 0.5s ease;
+}
+
+/* State Animations */
+.loaded .hero-content {
+    animation: contentFade 1s ease forwards;
+}
+
+@keyframes contentFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced Button Styles */
+.btn {
+    border: none;
+    position: relative;
+    background: var(--primary);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Animated Background Grid */
+.grid-overlay {
+    animation: gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(50px); }
+}
+</style>
+<!-- Services Section -->
+<section class="services" id="services">
+    <div class="services-container">
+        <div class="section-header">
+            <span class="section-subtitle">Our Expertise</span>
+            <h2 class="section-title">Transforming Businesses</h2>
+        </div>
+
+        <div class="services-grid">
+            <!-- Lead Generation -->
+            <div class="service-card">
+                <div class="card-content">
+                    <div class="icon-box">
+                        <svg class="service-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 8V16M12 8L15 11M12 8L9 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <div class="card-text">
+                        <h3>Lead Generation</h3>
+                        <p>Transform visitors into valuable prospects</p>
+                    </div>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <div class="result-value">85%</div>
+                            <div class="result-bar">
+                                <div class="bar-fill" style="width: 85%"></div>
+                            </div>
+                            <div class="result-label">Conversion Rate</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value">2.5x</div>
+                            <div class="result-bar">
+                                <div class="bar-fill" style="width: 75%"></div>
+                            </div>
+                            <div class="result-label">ROI Increase</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Digital Marketing -->
+            <div class="service-card">
+                <div class="card-content">
+                    <div class="icon-box">
+                        <svg class="service-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 21H3V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M21 9L13 17L9 13L3 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <div class="card-text">
+                        <h3>Digital Marketing</h3>
+                        <p>Data-driven marketing strategies</p>
+                    </div>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <div class="result-value">90%</div>
+                            <div class="result-bar">
+                                <div class="bar-fill" style="width: 90%"></div>
+                            </div>
+                            <div class="result-label">Engagement</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value">3.2x</div>
+                            <div class="result-bar">
+                                <div class="bar-fill" style="width: 80%"></div>
+                            </div>
+                            <div class="result-label">Traffic Growth</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Automation -->
+            <div class="service-card">
+                <div class="card-content">
+                    <div class="icon-box">
+                        <svg class="service-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <div class="card-text">
+                        <h3>AI Automation</h3>
+                        <p>Smart process automation solutions</p>
+                    </div>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <div class="result-value">70%</div>
+                            <div class="result-bar">
+                                <div class="bar-fill" style="width: 70%"></div>
+                            </div>
+                            <div class="result-label">Efficiency Gain</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value">45%</div>
+                            <div class="result-bar">
+                                <div class="bar-fill" style="width: 45%"></div>
+                            </div>
+                            <div class="result-label">Cost Reduction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brand Development -->
+            <div class="service-card">
+                <div class="card-content">
+                    <div class="icon-box">
+                        <svg class="service-icon" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <div class="card-text">
+                        <h3>Brand Development</h3>
+                        <p>Create memorable brand experiences</p>
+                    </div>
+                    <div class="results-grid">
+                        <div class="result-item">
+                            <div class="result-value">95%</div>
+                            <div class="result-bar">
+                                <div class="bar-fill" style="width: 95%"></div>
+                            </div>
+                            <div class="result-label">Brand Recognition</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-value">4.8x</div>
+                            <div class="result-bar">
+                                <div class="bar-fill" style="width: 90%"></div>
+                            </div>
+                            <div class="result-label">Engagement Boost</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+:root {
+    --primary: #4f46e5;
+    --secondary: #818cf8;
+    --dark: #1e1b4b;
+    --light: #f8fafc;
+    --success: #10b981;
+    --card-bg: rgba(255, 255, 255, 0.03);
+}
+
+.services {
+    background: var(--dark);
+    padding: 100px 0;
+    color: var(--light);
+}
+
+.services-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-subtitle {
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.service-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 30px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary);
+}
+
+.icon-box {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.service-icon {
+    width: 100%;
+    height: 100%;
+    color: var(--light);
+    padding: 12px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.icon-glow {
+    position: absolute;
+    inset: 0;
+    background: var(--primary);
+    filter: blur(20px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.service-card:hover .icon-glow {
+    opacity: 0.3;
+}
+
+.card-text {
+    margin-bottom: 25px;
+}
+
+.card-text h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.card-text p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+}
+
+.results-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.result-item {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.result-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.result-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    transform-origin: left;
+    animation: fillBar 1.5s ease forwards;
+}
+
+.result-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+@keyframes fillBar {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+}
+</style>
+
+<script>
+document.querySelectorAll('.service-card').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+        const bars = card.querySelectorAll('.bar-fill');
+        bars.forEach(bar => {
+            bar.style.animation = 'none';
+            bar.offsetHeight; // Trigger reflow
+            bar.style.animation = 'fillBar 1.5s ease forwards';
+        });
+    });
+});
+</script>
+
+</body>
+</html>
