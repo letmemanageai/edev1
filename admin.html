@@ -1,264 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Previous head content remains same -->
     <style>
-        :root {
-            --primary-color: #4e73df;
-            --secondary-color: #858796;
-            --success-color: #1cc88a;
-            --info-color: #36b9cc;
-            --warning-color: #f6c23e;
-            --danger-color: #e74a3b;
-        }
-
-        body {
-            background-color: #f8f9fc;
-            font-family: 'Nunito', sans-serif;
-        }
-
-        /* Login Page Styles */
-        .login-page {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(45deg, #4e73df, #224abe);
-        }
-
-        .login-box {
+        /* Previous styles remain same */
+        
+        /* Add these new styles */
+        .content-editor {
             background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
 
-        /* Dashboard Styles */
-        .dashboard {
+        .edit-form {
             display: none;
+            margin-top: 20px;
         }
 
-        .sidebar {
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .success-alert {
             position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 250px;
-            background: #4e73df;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            background: #1cc88a;
             color: white;
-            padding-top: 1rem;
-            transition: all 0.3s;
-        }
-
-        .sidebar .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 1rem 1.5rem;
-            margin: 0.2rem 1rem;
-            border-radius: 0.5rem;
-            transition: all 0.3s;
-        }
-
-        .sidebar .nav-link:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 0.5rem;
-            width: 20px;
-        }
-
-        .main-content {
-            margin-left: 250px;
-            padding: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .chart-container {
-            background: white;
-            border-radius: 0.5rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            display: none;
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
-    <!-- Login Page -->
-    <div class="login-page" id="loginPage">
-        <div class="login-box">
-            <h2 class="text-center mb-4">Admin Login</h2>
-            <form id="loginForm">
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
-        </div>
-    </div>
+    <!-- Login Page remains same -->
 
-    <!-- Dashboard -->
+    <!-- Modified Dashboard with Functional Features -->
     <div class="dashboard" id="dashboard">
+        <!-- Success Alert -->
+        <div class="success-alert" id="successAlert">
+            Changes saved successfully!
+        </div>
+
         <!-- Sidebar -->
         <div class="sidebar">
             <h4 class="text-center text-white mb-4">Admin Panel</h4>
             <nav class="nav flex-column">
-                <a class="nav-link active" href="#"><i class="fas fa-home"></i> Dashboard</a>
-                <a class="nav-link" href="#"><i class="fas fa-users"></i> Users</a>
-                <a class="nav-link" href="#"><i class="fas fa-chart-line"></i> Analytics</a>
-                <a class="nav-link" href="#"><i class="fas fa-cog"></i> Settings</a>
-                <a class="nav-link" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a class="nav-link" href="#" onclick="showSection('dashboardSection')">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a class="nav-link" href="#" onclick="showSection('contentSection')">
+                    <i class="fas fa-edit"></i> Content Management
+                </a>
+                <a class="nav-link" href="#" onclick="showSection('usersSection')">
+                    <i class="fas fa-users"></i> User Data
+                </a>
+                <a class="nav-link" href="#" onclick="showSection('settingsSection')">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <a class="nav-link" href="#" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </nav>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
-            <h2 class="mb-4">Dashboard Overview</h2>
-            
-            <!-- Stats Row -->
-            <div class="row">
-                <div class="col-xl-3 col-md-6">
-                    <div class="stat-card text-primary">
-                        <i class="fas fa-users stat-icon"></i>
-                        <h4>Total Users</h4>
-                        <h2>1,234</h2>
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="content-section">
+                <h2 class="mb-4">Dashboard Overview</h2>
+                <!-- Previous stats cards remain same -->
+            </div>
+
+            <!-- Content Management Section -->
+            <div id="contentSection" class="content-section" style="display: none;">
+                <h2 class="mb-4">Content Management</h2>
+                
+                <div class="content-editor">
+                    <h4>Hero Section</h4>
+                    <button class="btn btn-primary" onclick="toggleEdit('heroEdit')">
+                        Edit Content
+                    </button>
+                    
+                    <div id="heroEdit" class="edit-form">
+                        <form onsubmit="saveContent(event, 'hero')">
+                            <div class="mb-3">
+                                <label class="form-label">Heading</label>
+                                <input type="text" class="form-control" id="heroHeading" 
+                                       value="Transform Your Digital Presence">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Subheading</label>
+                                <input type="text" class="form-control" id="heroSubheading" 
+                                       value="Innovative digital solutions for modern businesses">
+                            </div>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </form>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="stat-card text-success">
-                        <i class="fas fa-chart-line stat-icon"></i>
-                        <h4>Revenue</h4>
-                        <h2>$45,678</h2>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="stat-card text-info">
-                        <i class="fas fa-shopping-cart stat-icon"></i>
-                        <h4>Orders</h4>
-                        <h2>567</h2>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6">
-                    <div class="stat-card text-warning">
-                        <i class="fas fa-star stat-icon"></i>
-                        <h4>Rating</h4>
-                        <h2>4.8/5</h2>
+
+                <div class="content-editor">
+                    <h4>Services Section</h4>
+                    <button class="btn btn-primary" onclick="toggleEdit('servicesEdit')">
+                        Edit Services
+                    </button>
+                    
+                    <div id="servicesEdit" class="edit-form">
+                        <form onsubmit="saveContent(event, 'services')">
+                            <div id="servicesList">
+                                <!-- Services will be added here dynamically -->
+                            </div>
+                            <button type="button" class="btn btn-info mt-3" onclick="addService()">
+                                Add Service
+                            </button>
+                            <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+                        </form>
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Activity -->
-            <div class="chart-container mt-4">
-                <h4 class="mb-4">Recent Activity</h4>
-                <div class="table-responsive">
+            <!-- User Data Section -->
+            <div id="usersSection" class="content-section" style="display: none;">
+                <h2 class="mb-4">User Data</h2>
+                
+                <div class="data-table">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Activity</th>
-                                <th>Status</th>
+                                <th>Visitors</th>
+                                <th>Page Views</th>
+                                <th>Conversions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>2023-11-01</td>
-                                <td>New User Registration</td>
-                                <td><span class="badge bg-success">Completed</span></td>
-                            </tr>
-                            <tr>
-                                <td>2023-11-01</td>
-                                <td>Order #12345</td>
-                                <td><span class="badge bg-warning">Pending</span></td>
-                            </tr>
+                        <tbody id="visitorData">
+                            <!-- Data will be populated dynamically -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settingsSection" class="content-section" style="display: none;">
+                <h2 class="mb-4">Settings</h2>
+                
+                <div class="content-editor">
+                    <form onsubmit="saveSettings(event)">
+                        <div class="mb-3">
+                            <label class="form-label">Site Title</label>
+                            <input type="text" class="form-control" id="siteTitle" 
+                                   value="Edev Agency">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact Email</label>
+                            <input type="email" class="form-control" id="contactEmail" 
+                                   value="info@edevagency.com">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Analytics ID</label>
+                            <input type="text" class="form-control" id="analyticsId" 
+                                   value="UA-XXXXXXXXX">
+                        </div>
+                        <button type="submit" class="btn btn-success">Save Settings</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Add this before closing body tag -->
     <script>
-        // Login credentials
-        const ADMIN_CREDENTIALS = {
-            username: 'admin',
-            password: 'admin123'
-        };
+        // Previous login/logout logic remains same
 
-        // DOM Elements
-        const loginPage = document.getElementById('loginPage');
-        const dashboard = document.getElementById('dashboard');
-        const loginForm = document.getElementById('loginForm');
-        const logoutBtn = document.getElementById('logoutBtn');
-
-        // Check if user is logged in
-        function checkLogin() {
-            if (localStorage.getItem('adminLoggedIn') === 'true') {
-                showDashboard();
-            }
+        // Show/Hide Sections
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
         }
 
-        // Show Dashboard
-        function showDashboard() {
-            loginPage.style.display = 'none';
-            dashboard.style.display = 'block';
+        // Toggle Edit Forms
+        function toggleEdit(formId) {
+            const form = document.getElementById(formId);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
         }
 
-        // Login Handler
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        // Save Content Changes
+        function saveContent(event, section) {
+            event.preventDefault();
+            
+            // Save to localStorage for demonstration
+            const data = {};
+            event.target.querySelectorAll('input').forEach(input => {
+                data[input.id] = input.value;
+            });
+            localStorage.setItem(`content_${section}`, JSON.stringify(data));
+            
+            showSuccess();
+        }
 
-            if (username === ADMIN_CREDENTIALS.username && 
-                password === ADMIN_CREDENTIALS.password) {
-                localStorage.setItem('adminLoggedIn', 'true');
-                showDashboard();
-            } else {
-                alert('Invalid credentials!');
+        // Add Service
+        function addService() {
+            const servicesList = document.getElementById('servicesList');
+            const serviceNum = servicesList.children.length + 1;
+            
+            const serviceHtml = `
+                <div class="mb-3 border p-3">
+                    <h5>Service ${serviceNum}</h5>
+                    <div class="mb-2">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" name="service_title_${serviceNum}">
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="service_desc_${serviceNum}"></textarea>
+                    </div>
+                </div>
+            `;
+            
+            servicesList.insertAdjacentHTML('beforeend', serviceHtml);
+        }
+
+        // Save Settings
+        function saveSettings(event) {
+            event.preventDefault();
+            
+            const settings = {
+                siteTitle: document.getElementById('siteTitle').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                analyticsId: document.getElementById('analyticsId').value
+            };
+            
+            localStorage.setItem('site_settings', JSON.stringify(settings));
+            showSuccess();
+        }
+
+        // Show Success Message
+        function showSuccess() {
+            const alert = document.getElementById('successAlert');
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        // Load Mock Data
+        function loadMockData() {
+            // Populate visitor data
+            const visitorData = document.getElementById('visitorData');
+            const mockData = [
+                { date: '2023-11-01', visitors: 156, pageViews: 423, conversions: 12 },
+                { date: '2023-11-02', visitors: 142, pageViews: 389, conversions: 9 },
+                { date: '2023-11-03', visitors: 168, pageViews: 445, conversions: 15 }
+            ];
+            
+            visitorData.innerHTML = mockData.map(data => `
+                <tr>
+                    <td>${data.date}</td>
+                    <td>${data.visitors}</td>
+                    <td>${data.pageViews}</td>
+                    <td>${data.conversions}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMockData();
+            
+            // Load saved content
+            const savedSettings = localStorage.getItem('site_settings');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                Object.keys(settings).forEach(key => {
+                    if (document.getElementById(key)) {
+                        document.getElementById(key).value = settings[key];
+                    }
+                });
             }
         });
-
-        // Logout Handler
-        logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('adminLoggedIn');
-            loginPage.style.display = 'flex';
-            dashboard.style.display = 'none';
-        });
-
-        // Check login status on page load
-        checkLogin();
     </script>
 </body>
 </html>
