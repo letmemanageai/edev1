@@ -2374,11 +2374,16 @@ document.querySelectorAll('.service-card').forEach(card => {
     });
 });
 </script>
-<!-- Add this to your landing page footer -->
-<div class="footer-links">
-    <!-- ... other footer links ... -->
-    <a href="admin.html" class="admin-link">Admin Login</a>
-</div>
+<!-- Hidden Admin Trigger -->
+<script>
+    // Add keyboard shortcut for admin panel
+    document.addEventListener('keydown', function(event) {
+        // Ctrl + Alt + A to show admin login
+        if (event.ctrlKey && event.altKey && event.key === 'a') {
+            window.location.href = 'admin.html';
+        }
+    });
+</script>
 
 </body>
 </html>
