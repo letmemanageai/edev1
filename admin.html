@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edev Agency - Admin Panel</title>
+    <style>
+        /* Previous CSS styles remain the same */
+        .editable-field {
+            border: 1px dashed #ccc;
+            padding: 10px;
+            margin: 5px 0;
+            position: relative;
+        }
+
+        .editable-field:hover {
+            border-color: var(--secondary-color);
+            background: #f8f9fa;
+        }
+
+        .edit-label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: white;
+            padding: 0 5px;
+            font-size: 12px;
+            color: var(--secondary-color);
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .content-preview {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="success-message" class="success-message">Changes saved successfully!</div>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <nav id="section-nav">
+                <!-- Navigation will be dynamically generated -->
+            </nav>
+            <button class="btn btn-primary" onclick="window.open('index.html', '_blank')">View Website</button>
+        </div>
+
+        <div class="main-content" id="main-content">
+            <!-- Content will be dynamically generated -->
+        </div>
+    </div>
+
+    <script>
+        // Function to parse landing page content and create admin controls
+        async function initializeAdminPanel() {
+            try {
+                // Fetch the landing page content
+                const response = await fetch('index.html');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                // Create navigation and content sections
+                const sections = new Map();
+                const nav = document.getElementById('section-nav');
+                const mainContent = document.getElementById('main-content');
+                
+                // Find all sections from the landing page
+                doc.querySelectorAll('section, div').forEach((section, index) => {
+                    if (section.id || section.className) {
+                        const sectionId = section.id || section.className;
+                        const sectionName = sectionId
+                            .replace(/-/g, ' ')
+                            .replace(/([A-Z])/g, ' $1')
+                            .toLowerCase()
+                            .split(' ')
+                            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                            .join(' ');
+
+                        sections.set(sectionId, {
+                            name: sectionName,
+                            content: section.innerHTML
+                        });
+
+                        // Create navigation item
+                        const navItem = document.createElement('a');
+                        navItem.href = '#' + sectionId;
+                        navItem.textContent = sectionName;
+                        navItem.onclick = (e) => {
+                            e.preventDefault();
+                            showSection(sectionId);
+                        };
+                        nav.appendChild(navItem);
+
+                        // Create content editor
+                        const editor = createSectionEditor(sectionId, section);
+                        mainContent.appendChild(editor);
+                    }
+                });
+
+                // Show first section by default
+                const firstSection = sections.keys().next().value;
+                if (firstSection) {
+                    showSection(firstSection);
+                }
+
+            } catch (error) {
+                console.error('Error initializing admin panel:', error);
+            }
+        }
+
+        function createSectionEditor(sectionId, section) {
+            const editor = document.createElement('div');
+            editor.className = 'section-editor';
+            editor.id = `editor-${sectionId}`;
+            editor.style.display = 'none';
+
+            const title = document.createElement('h2');
+            title.textContent = sectionId
+                .replace(/-/g, ' ')
+                .replace(/([A-Z])/g, ' $1')
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+            editor.appendChild(title);
+
+            // Create editors for text content
+            section.childNodes.forEach((node, index) => {
+                if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                    editor.appendChild(createTextEditor(
+                        `${sectionId}-text-${index}`,
+                        node.textContent.trim(),
+                        'Text'
+                    ));
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    switch (node.tagName.toLowerCase()) {
+                        case 'h1':
+                        case 'h2':
+                        case 'h3':
+                        case 'h4':
+                        case 'h5':
+                        case 'h6':
+                            editor.appendChild(createTextEditor(
+                                `${sectionId}-${node.tagName.toLowerCase()}-${index}`,
+                                node.textContent,
+                                'Heading'
+                            ));
+                            break;
+                        case 'p':
+                            editor.appendChild(createTextEditor(
+                                `${sectionId}-p-${index}`,
+                                node.textContent,
+                                'Paragraph',
+                                true
+                            ));
+                            break;
+                        case 'a':
+                            editor.appendChild(createLinkEditor(
+                                `${sectionId}-a-${index}`,
+                                node.textContent,
+                                node.href
+                            ));
+                            break;
+                        case 'img':
+                            editor.appendChild(createImageEditor(
+                                `${sectionId}-img-${index}`,
+                                node.src,
+                                node.alt
+                            ));
+                            break;
+                    }
+                }
+            });
+
+            // Add save button
+            const saveButton = document.createElement('button');
+            saveButton.className = 'btn btn-primary';
+            saveButton.textContent = 'Save Changes';
+            saveButton.onclick = () => saveSection(sectionId);
+            editor.appendChild(saveButton);
+
+            return editor;
+        }
+
+        function createTextEditor(id, content, label, isTextarea = false) {
+            const container = document.createElement('div');
+            container.className = 'form-group editable-field';
+
+            const labelElement = document.createElement('label');
+            labelElement.className = 'edit-label';
+            labelElement.textContent = label;
+            container.appendChild(labelElement);
+
+            if (isTextarea) {
+                const textarea = document.createElement('textarea');
+                textarea.id = id;
+                textarea.value = content;
+                textarea.rows = 4;
+                container.appendChild(textarea);
+            } else {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = id;
+                input.value = content;
+                container.appendChild(input);
+            }
+
+            return container;
+        }
+
+        function createLinkEditor(id, text, href) {
+            const container = document.createElement('div');
+            container.className = 'form-group editable-field';
+
+            const labelElement = document.createElement('label');
+            labelElement.className = 'edit-label';
+            labelElement.textContent = 'Link';
+            container.appendChild(labelElement);
+
+            const textInput = document.createElement('input');
+            textInput.type = 'text';
+            textInput.id = `${id}-text`;
+            textInput.value = text;
+            textInput.placeholder = 'Link Text';
+            container.appendChild(textInput);
+
+            const hrefInput = document.createElement('input');
+            hrefInput.type = 'text';
+            hrefInput.id = `${id}-href`;
+            hrefInput.value = href;
+            hrefInput.placeholder = 'URL';
+            container.appendChild(hrefInput);
+
+            return container;
+        }
+
+        function createImageEditor(id, src, alt) {
+            const container = document.createElement('div');
+            container.className = 'form-group editable-field';
+
+            const labelElement = document.createElement('label');
+            labelElement.className = 'edit-label';
+            labelElement.textContent = 'Image';
+            container.appendChild(labelElement);
+
+            const srcInput = document.createElement('input');
+            srcInput.type = 'text';
+            srcInput.id = `${id}-src`;
+            srcInput.value = src;
+            srcInput.placeholder = 'Image URL';
+            container.appendChild(srcInput);
+
+            const altInput = document.createElement('input');
+            altInput.type = 'text';
+            altInput.id = `${id}-alt`;
+            altInput.value = alt;
+            altInput.placeholder = 'Image Alt Text';
+            container.appendChild(altInput);
+
+            const preview = document.createElement('img');
+            preview.src = src;
+            preview.alt = alt;
+            preview.style.maxWidth = '200px';
+            preview.style.marginTop = '10px';
+            container.appendChild(preview);
+
+            return container;
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-editor').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show selected section
+            const editor = document.getElementById(`editor-${sectionId}`);
+            if (editor) {
+                editor.style.display = 'block';
+            }
+        }
+
+        function saveSection(sectionId) {
+            const content = {};
+            const editor = document.getElementById(`editor-${sectionId}`);
+            
+            // Collect all input values
+            editor.querySelectorAll('input, textarea').forEach(input => {
+                content[input.id] = input.value;
+            });
+
+            // Save to localStorage
+            const savedContent = JSON.parse(localStorage.getItem('siteContent') || '{}');
+            savedContent[sectionId] = content;
+            localStorage.setItem('siteContent', JSON.stringify(savedContent));
+
+            showSuccessMessage();
+        }
+
+        function showSuccessMessage() {
+            const message = document.getElementById('success-message');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize the admin panel when the page loads
+        document.addEventListener('DOMContentLoaded', initializeAdminPanel);
+    </script>
+</body>
+</html>
